@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Performance Detective</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      width: 360px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      background: #ffffff;
+      color: #1a1a1a;
+    }
+    
+    .popup-container {
+      padding: 24px;
+    }
+    
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    
+    .title-section {
+      flex: 1;
+    }
+    
+    .title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 2px;
+    }
+    
+    .subtitle {
+      font-size: 13px;
+      color: #6b7280;
+    }
+    
+    .description {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    
+    .cta-button {
+      width: 100%;
+      padding: 12px 16px;
+      background: #3b82f6;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .cta-button:hover {
+      background: #2563eb;
+    }
+    
+    .cta-button:active {
+      transform: scale(0.98);
+    }
+    
+    .divider {
+      height: 1px;
+      background: #e5e7eb;
+      margin: 20px 0;
+    }
+    
+    .features {
+      margin-bottom: 20px;
+    }
+    
+    .features-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 12px;
+    }
+    
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+    
+    .feature-icon {
+      width: 18px;
+      height: 18px;
+      background: #eff6ff;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    
+    .feature-icon svg {
+      width: 12px;
+      height: 12px;
+      color: #3b82f6;
+    }
+    
+    .shortcut {
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 12px;
+      color: #6b7280;
+      text-align: center;
+      margin-top: 16px;
+    }
+    
+    .shortcut-key {
+      font-weight: 600;
+      color: #1a1a1a;
+      font-family: monospace;
+      background: #ffffff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      margin: 0 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="popup-container">
+    <div class="header">
+      <img src="../icons/analytics.png" alt="RootCause" class="icon" width="48" height="48">
+      <div class="title-section">
+        <div class="title">RootCause</div>
+        <div class="subtitle">Web Performance Analysis</div>
+      </div>
+    </div>
+    
+    <p class="description">
+      Analyze your page performance and get plain-English explanations with actionable fixes.
+    </p>
+    
+    <button class="cta-button" id="open-devtools">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      Open DevTools
+    </button>
+    
+    <div class="divider"></div>
+    
+    <div class="features">
+      <div class="features-title">What it does:</div>
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 16 16" fill="none">
+              <path d="M13 5L6 12L3 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span>Identifies performance blockers</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 16 16" fill="none">
+              <path d="M13 5L6 12L3 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span>Explains issues in plain English</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 16 16" fill="none">
+              <path d="M13 5L6 12L3 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span>Provides actionable fix suggestions</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 16 16" fill="none">
+              <path d="M13 5L6 12L3 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span>Prioritizes by impact</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="shortcut">
+      Open DevTools: <span class="shortcut-key">F12</span> or <span class="shortcut-key">Cmd+Opt+I</span>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

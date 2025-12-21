@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Performance Detective Test Page</title>
+  
+  <!-- Intentionally render-blocking CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  
+  <!-- Intentionally blocking script -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    .hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 100px 20px;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .hero h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+    }
+    
+    .content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .card {
+      border: 1px solid #ddd;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
+    
+    /* This will cause a layout shift */
+    .late-loaded-image {
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>🔍 Performance Detective Test Page</h1>
+    <p>This page intentionally has performance issues for testing</p>
+  </div>
+
+  <div class="content">
+    <div class="card">
+      <h2>Performance Issues on This Page</h2>
+      <ul>
+        <li><strong>Render-Blocking CSS:</strong> Bootstrap CSS loaded in head</li>
+        <li><strong>Render-Blocking JavaScript:</strong> jQuery loaded synchronously</li>
+        <li><strong>Layout Shift:</strong> Images without dimensions</li>
+        <li><strong>Large Third-Party Resources:</strong> Multiple CDN resources</li>
+        <li><strong>Long Tasks:</strong> Heavy JavaScript execution below</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Test Image (No Dimensions = Layout Shift)</h2>
+      <!-- Image without width/height causes layout shift -->
+      <img src="https://picsum.photos/800/400" alt="Test Image" class="late-loaded-image">
+    </div>
+
+    <div class="card">
+      <h2>Another Test Section</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </div>
+    
+    <div id="dynamic-content"></div>
+  </div>
+
+  <!-- More render-blocking scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // Simulate a long task (bad for performance)
+    console.time('Long Task');
+    let sum = 0;
+    for (let i = 0; i < 50000000; i++) {
+      sum += Math.sqrt(i);
+    }
+    console.timeEnd('Long Task');
+    console.log('Long task completed, sum:', sum);
+    
+    // Simulate dynamic content injection (causes layout shift)
+    setTimeout(() => {
+      const dynamicContent = document.getElementById('dynamic-content');
+      dynamicContent.innerHTML = `
+        <div class="card">
+          <h2>Dynamically Loaded Content</h2>
+          <p>This content was injected after page load, causing a layout shift.</p>
+          <img src="https://picsum.photos/800/300" alt="Dynamic Image" class="late-loaded-image">
+        </div>
+      `;
+    }, 2000);
+    
+    // Simulate memory usage
+    const largeArray = new Array(1000000).fill('data');
+    console.log('Created large array for memory testing');
+  </script>
+  
+  <!-- Tracking script simulation -->
+  <script>
+    (function() {
+      // Simulate analytics tracking (adds to load time)
+      const start = Date.now();
+      while (Date.now() - start < 100) {
+        // Busy wait to simulate slow tracking script
+      }
+      console.log('Tracking script "loaded"');
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "performance-detective",
+  "version": "1.0.0",
+  "description": "A Root-Cause Explainer for Web Performance - Chrome Extension",
+  "type": "module",
+  "scripts": {
+    "generate-icons": "./generate-icons.sh",
+    "test": "echo \"Open chrome://extensions/ and load unpacked extension\"",
+    "dev": "echo \"Make changes and reload extension at chrome://extensions/\""
+  },
+  "keywords": [
+    "chrome-extension",
+    "performance",
+    "web-vitals",
+    "devtools",
+    "lighthouse",
+    "performance-analysis"
+  ],
+  "author": "Yashraj",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/performance-detective"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

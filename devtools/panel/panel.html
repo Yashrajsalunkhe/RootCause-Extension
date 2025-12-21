@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Performance Detective</title>
+  <link rel="stylesheet" href="panel.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <h2 class="app-title">RootCause</h2>
+      <button id="analyze-btn" class="analyze-button">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 2V14M2 8H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Analyze Page
+      </button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Loading State -->
+      <div id="loading" class="loading-state hidden">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Analyzing performance...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div id="empty-state" class="empty-container">
+        <img src="../../icons/analytics.png" alt="RootCause" class="empty-icon-circle" width="64" height="64">
+        <h2 class="empty-title">RootCause</h2>
+        <p class="empty-description">Click "Analyze Page" to start investigating performance issues</p>
+      </div>
+
+      <!-- Results -->
+      <div id="results" class="results-container hidden">
+        <!-- Page Info Card -->
+        <div class="page-info-card">
+          <div class="page-header">
+            <div class="page-avatar">🌐</div>
+            <div class="page-details">
+              <h1 class="page-title" id="page-title">Page Analysis</h1>
+              <p class="page-url" id="page-url">Loading...</p>
+            </div>
+          </div>
+          
+          <div class="metrics-grid">
+            <div class="metric-item">
+              <span class="metric-label">TTFB</span>
+              <span class="metric-value" id="metric-ttfb">-</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">FCP</span>
+              <span class="metric-value" id="metric-fcp">-</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">LCP</span>
+              <span class="metric-value" id="metric-lcp">-</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">CLS</span>
+              <span class="metric-value" id="metric-cls">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Critical Issues Section -->
+        <div class="section-container">
+          <div class="section-header critical-header">
+            <h3 class="section-title">Critical Issues</h3>
+            <span class="section-badge critical-badge" id="critical-count">0</span>
+          </div>
+          <div id="critical-issues" class="issues-list"></div>
+        </div>
+
+        <!-- Optimizations Section -->
+        <div class="section-container">
+          <div class="section-header optimize-header">
+            <h3 class="section-title">Optimizations</h3>
+            <span class="section-badge optimize-badge" id="optimize-count">0</span>
+          </div>
+          <div id="optimization-issues" class="issues-list"></div>
+        </div>
+
+        <!-- Timeline Section -->
+        <div class="section-container">
+          <div class="section-header">
+            <h3 class="section-title">Performance Timeline</h3>
+          </div>
+          <div id="timeline" class="timeline-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="panel.js"></script>
+</body>
+</html>
