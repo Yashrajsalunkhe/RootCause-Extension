@@ -390,38 +390,58 @@ async function analyzePerformance(tabId) {
     await chrome.debugger.sendCommand({ tabId }, 'Network.enable');
     await chrome.debugger.sendCommand({ tabId }, 'Page.enable');
     
-    // Step 3: Collect performance data
+    // Step 3: Collect comprehensive performance data
     const performanceData = await collectPerformanceData(tabId);
     
-    // Step 4: Analyze dependencies
+    // Step 4: Generate comprehensive performance report using enhanced analyzer
+    const metrics = PerformanceAnalyzer.analyzeMetrics(performanceData);
+    const resources = PerformanceAnalyzer.analyzeResources(performanceData);
+    const issues = PerformanceAnalyzer.identifyIssues(metrics, resources, performanceData);
+    const timeline = PerformanceAnalyzer.createTimeline(performanceData);
+    
+    // Step 5: Analyze dependencies (legacy support)
     const dependencyAnalysis = DependencyTracer.analyze(performanceData);
     
-    // Step 5: Translate to human language
+    // Step 6: Translate to human language (legacy support)
     const narratives = HumanTranslator.translate(dependencyAnalysis);
     
-    // Step 6: Prioritize issues
+    // Step 7: Prioritize issues (legacy support)
     const prioritizedIssues = PriorityEngine.prioritize(narratives);
-    
-    // Step 7: Create timeline
-    const timeline = createTimeline(performanceData);
     
     // Detach debugger
     await chrome.debugger.detach({ tabId });
     
+    // Return comprehensive analysis
     return {
-      issues: prioritizedIssues,
-      timeline: timeline,
-      rawData: performanceData
+      success: true,
+      data: {
+        metrics,
+        resources,
+        issues,
+        timeline,
+        rawData: performanceData,
+        analysis: performanceData.timing?.analysis || {},
+        // Legacy support
+        dependencyAnalysis,
+        narratives,
+        prioritizedIssues
+      }
     };
+    
   } catch (error) {
-    console.error('Performance analysis error:', error);
-    // Try to detach debugger even if there was an error
+    console.error('Performance analysis failed:', error);
+    
+    // Try to detach debugger on error
     try {
       await chrome.debugger.detach({ tabId });
     } catch (e) {
       // Ignore detach errors
     }
-    throw error;
+    
+    return {
+      success: false,
+      error: error.message
+    };
   }
 }
 
@@ -435,7 +455,7 @@ async function collectPerformanceData(tabId) {
   // Get performance metrics
   const metrics = await chrome.debugger.sendCommand({ tabId }, 'Performance.getMetrics');
   
-  // Inject script to get Navigation Timing and Resource Timing data
+  // Inject comprehensive script to get all performance data
   const result = await chrome.debugger.sendCommand({ tabId }, 'Runtime.evaluate', {
     expression: `
       (function() {
@@ -444,20 +464,120 @@ async function collectPerformanceData(tabId) {
         const paintEntries = performance.getEntriesByType('paint');
         const layoutShifts = performance.getEntriesByType('layout-shift');
         
+        // Enhanced resource analysis
+        const enhancedResources = resources.map(resource => {
+          const enhanced = resource.toJSON();
+          
+          // Add computed properties
+          enhanced.transferSize = resource.transferSize || resource.encodedBodySize || 0;
+          enhanced.duration = resource.duration || (resource.responseEnd - resource.responseStart);
+          enhanced.isThirdParty = false;
+          enhanced.responseCode = 200; // Default, would need actual implementation
+          enhanced.compression = resource.transferSize && resource.decodedBodySize ? 
+            ((resource.decodedBodySize - resource.transferSize) / resource.decodedBodySize * 100).toFixed(1) : 0;
+          
+          // Determine resource type
+          const url = resource.name.toLowerCase();
+          if (url.includes('.js') || resource.initiatorType === 'script') {
+            enhanced.resourceType = 'script';
+          } else if (url.match(/\\.(jpg|jpeg|png|gif|webp|svg|ico)$/)) {
+            enhanced.resourceType = 'image';
+          } else if (url.includes('.css') || resource.initiatorType === 'link') {
+            enhanced.resourceType = 'stylesheet';
+          } else if (url.match(/\\.(woff|woff2|ttf|otf)$/)) {
+            enhanced.resourceType = 'font';
+          } else if (url.includes('.html') || resource.initiatorType === 'navigation') {
+            enhanced.resourceType = 'document';
+          } else {
+            enhanced.resourceType = 'other';
+          }
+          
+          // Check if third party
+          try {
+            const resourceHost = new URL(resource.name).hostname;
+            const pageHost = window.location.hostname;
+            enhanced.isThirdParty = resourceHost !== pageHost;
+            enhanced.domain = resourceHost;
+          } catch (e) {
+            enhanced.domain = window.location.hostname;
+          }
+          
+          return enhanced;
+        });
+        
+        // Calculate page size breakdown
+        const sizeByType = enhancedResources.reduce((acc, resource) => {
+          if (!acc[resource.resourceType]) acc[resource.resourceType] = 0;
+          acc[resource.resourceType] += resource.transferSize || 0;
+          return acc;
+        }, {});
+        
+        const sizeByDomain = enhancedResources.reduce((acc, resource) => {
+          if (!acc[resource.domain]) acc[resource.domain] = 0;
+          acc[resource.domain] += resource.transferSize || 0;
+          return acc;
+        }, {});
+        
+        // Calculate performance score components
+        const totalSize = enhancedResources.reduce((sum, r) => sum + (r.transferSize || 0), 0);
+        const loadTime = navigation ? navigation.loadEventEnd - navigation.fetchStart : 0;
+        const ttfb = navigation ? navigation.responseStart - navigation.fetchStart : 0;
+        
+        // Core Web Vitals calculation
+        const fcp = paintEntries.find(p => p.name === 'first-contentful-paint');
+        const lcp = navigation ? navigation.loadEventEnd - navigation.fetchStart : 0; // Approximation
+        const cls = layoutShifts.reduce((sum, shift) => sum + shift.value, 0);
+        
+        // Performance grade calculation
+        let grade = 100;
+        if (loadTime > 3000) grade -= 30;
+        else if (loadTime > 2000) grade -= 20;
+        else if (loadTime > 1000) grade -= 10;
+        
+        if (totalSize > 1000000) grade -= 20; // > 1MB
+        else if (totalSize > 500000) grade -= 10; // > 500KB
+        
+        if (enhancedResources.length > 50) grade -= 15;
+        else if (enhancedResources.length > 30) grade -= 10;
+        else if (enhancedResources.length > 15) grade -= 5;
+        
+        if (ttfb > 800) grade -= 15;
+        else if (ttfb > 400) grade -= 10;
+        
+        if (cls > 0.25) grade -= 20;
+        else if (cls > 0.1) grade -= 10;
+        
+        grade = Math.max(0, Math.min(100, grade));
+        
         return {
           navigation: navigation ? navigation.toJSON() : null,
-          resources: resources.map(r => r.toJSON()),
+          resources: enhancedResources,
           paint: paintEntries.map(p => p.toJSON()),
           layoutShifts: layoutShifts.map(l => l.toJSON()),
           memory: performance.memory ? {
             jsHeapSizeLimit: performance.memory.jsHeapSizeLimit,
             totalJSHeapSize: performance.memory.totalJSHeapSize,
             usedJSHeapSize: performance.memory.usedJSHeapSize
-          } : null
+          } : null,
+          analysis: {
+            totalSize,
+            loadTime,
+            ttfb,
+            grade: Math.round(grade),
+            sizeByType,
+            sizeByDomain,
+            coreWebVitals: {
+              fcp: fcp ? fcp.startTime : null,
+              lcp,
+              cls,
+              ttfb
+            }
+          }
         };
       })()
     `,
-    returnByValue: true
+    returnByValue: true,
+    awaitPromise: false
   });
   
   return {

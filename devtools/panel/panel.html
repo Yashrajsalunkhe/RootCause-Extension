@@ -34,39 +34,175 @@
         <p class="empty-description">Click "Analyze Page" to start investigating performance issues</p>
       </div>
 
-      <!-- Results -->
-      <div id="results" class="results-container hidden">
-        <!-- Page Info Card -->
-        <div class="page-info-card">
-          <div class="page-header">
-            <div class="page-avatar">🌐</div>
-            <div class="page-details">
-              <h1 class="page-title" id="page-title">Page Analysis</h1>
-              <p class="page-url" id="page-url">Loading...</p>
+        <!-- Results -->
+        <div id="results" class="results-container hidden">
+          <!-- Performance Summary Card -->
+          <div class="performance-summary-card">
+            <div class="summary-header">
+              <div class="summary-grade-container">
+                <div class="performance-grade" id="performance-grade">88</div>
+                <div class="grade-label">Performance grade</div>
+              </div>
+              <div class="summary-metrics">
+                <div class="summary-metric">
+                  <div class="summary-metric-label">Page size</div>
+                  <div class="summary-metric-value" id="page-size">348.1 KB</div>
+                </div>
+                <div class="summary-metric">
+                  <div class="summary-metric-label">Load time</div>
+                  <div class="summary-metric-value" id="load-time">1.62 s</div>
+                </div>
+                <div class="summary-metric">
+                  <div class="summary-metric-label">Requests</div>
+                  <div class="summary-metric-value" id="total-requests">13</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Performance Improvement Suggestions -->
+            <div class="improvement-section">
+              <div class="improvement-header">
+                <h3>Improve page performance</h3>
+              </div>
+              <div class="improvement-list" id="improvement-list">
+                <!-- Will be populated dynamically -->
+              </div>
             </div>
           </div>
-          
-          <div class="metrics-grid">
-            <div class="metric-item">
-              <span class="metric-label">TTFB</span>
-              <span class="metric-value" id="metric-ttfb">-</span>
-            </div>
-            <div class="metric-item">
-              <span class="metric-label">FCP</span>
-              <span class="metric-value" id="metric-fcp">-</span>
-            </div>
-            <div class="metric-item">
-              <span class="metric-label">LCP</span>
-              <span class="metric-value" id="metric-lcp">-</span>
-            </div>
-            <div class="metric-item">
-              <span class="metric-label">CLS</span>
-              <span class="metric-value" id="metric-cls">-</span>
-            </div>
-          </div>
-        </div>
 
-        <!-- Critical Issues Section -->
+          <!-- File Requests Section -->
+          <div class="section-container">
+            <div class="section-header">
+              <h3 class="section-title">File requests</h3>
+              <div class="section-controls">
+                <select id="sort-select" class="sort-select">
+                  <option value="load-order">Load Order</option>
+                  <option value="size">Size</option>
+                  <option value="time">Time</option>
+                </select>
+                <button id="filter-btn" class="filter-btn">Filter</button>
+              </div>
+            </div>
+            
+            <!-- Request Legend -->
+            <div class="request-legend">
+              <div class="legend-item">
+                <div class="legend-color legend-dns"></div>
+                <span>DNS</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color legend-ssl"></div>
+                <span>SSL</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color legend-connect"></div>
+                <span>Connect</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color legend-send"></div>
+                <span>Send</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color legend-wait"></div>
+                <span>Wait</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color legend-receive"></div>
+                <span>Receive</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color legend-blocked"></div>
+                <span>Blocked</span>
+              </div>
+            </div>
+            
+            <div class="requests-waterfall" id="requests-waterfall">
+              <!-- Will be populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Response Codes Section -->
+          <div class="section-container">
+            <div class="section-header">
+              <h3 class="section-title">Response codes</h3>
+            </div>
+            <div class="response-codes-grid" id="response-codes">
+              <!-- Will be populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Content Analysis Section -->
+          <div class="content-analysis-section">
+            <div class="content-grid">
+              <div class="content-panel">
+                <div class="content-panel-header">
+                  <h3>Content size by content type</h3>
+                </div>
+                <div class="content-breakdown" id="content-by-type">
+                  <!-- Will be populated dynamically -->
+                </div>
+              </div>
+              
+              <div class="content-panel">
+                <div class="content-panel-header">
+                  <h3>Requests by content type</h3>
+                </div>
+                <div class="content-breakdown" id="requests-by-type">
+                  <!-- Will be populated dynamically -->
+                </div>
+              </div>
+            </div>
+            
+            <div class="content-grid">
+              <div class="content-panel">
+                <div class="content-panel-header">
+                  <h3>Content size by domain</h3>
+                </div>
+                <div class="content-breakdown" id="content-by-domain">
+                  <!-- Will be populated dynamically -->
+                </div>
+              </div>
+              
+              <div class="content-panel">
+                <div class="content-panel-header">
+                  <h3>Requests by domain</h3>
+                </div>
+                <div class="content-breakdown" id="requests-by-domain">
+                  <!-- Will be populated dynamically -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Page Info Card -->
+          <div class="page-info-card">
+            <div class="page-header">
+              <div class="page-avatar">🌐</div>
+              <div class="page-details">
+                <h1 class="page-title" id="page-title">Page Analysis</h1>
+                <p class="page-url" id="page-url">Loading...</p>
+              </div>
+            </div>
+            
+            <div class="metrics-grid">
+              <div class="metric-item">
+                <span class="metric-label">TTFB</span>
+                <span class="metric-value" id="metric-ttfb">-</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">FCP</span>
+                <span class="metric-value" id="metric-fcp">-</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">LCP</span>
+                <span class="metric-value" id="metric-lcp">-</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">CLS</span>
+                <span class="metric-value" id="metric-cls">-</span>
+              </div>
+            </div>
+          </div>        <!-- Critical Issues Section -->
         <div class="section-container">
           <div class="section-header critical-header">
             <h3 class="section-title">Critical Issues</h3>
