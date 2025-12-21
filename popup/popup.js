@@ -1,11 +1,25 @@
+// Cross-browser popup controller
+// Works with Chrome, Firefox, Edge, and Safari
+
+// Browser compatibility layer
+const browser = (() => {
+  if (typeof chrome !== 'undefined' && chrome.tabs) {
+    return chrome;
+  }
+  if (typeof browser !== 'undefined') {
+    return browser;
+  }
+  // Fallback
+  return window.browser || window.chrome || {};
+})();
+
 document.getElementById('open-devtools').addEventListener('click', () => {
   // Get the current tab and send a message to help user
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs[0]) {
-      // Show a helpful notification
-      chrome.scripting.executeScript({
-        target: { tabId: tabs[0].id },
-        func: () => {
+  if (browser.tabs?.query) {
+    browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]) {
+        // Show a helpful notification
+        const injectNotification = () => {
           // Create a temporary notification
           const notification = document.createElement('div');
           notification.style.cssText = `
@@ -23,8 +37,8 @@ document.getElementById('open-devtools').addEventListener('click', () => {
             animation: slideIn 0.3s ease;
           `;
           notification.innerHTML = `
-            <div style="font-weight: 600; margin-bottom: 4px;">👋 Performance Detective</div>
-            <div style="opacity: 0.9;">Press <strong>F12</strong> and look for the "Performance Detective" tab</div>
+            <div style="font-weight: 600; margin-bottom: 4px;">👋 RootCause</div>
+            <div style="opacity: 0.9;">Press <strong>F12</strong> and look for the "RootCause" tab</div>
           `;
           document.body.appendChild(notification);
           
@@ -38,14 +52,39 @@ document.getElementById('open-devtools').addEventListener('click', () => {
             notification.style.animation = 'slideIn 0.3s ease reverse';
             setTimeout(() => notification.remove(), 300);
           }, 5000);
+        };
+
+        // Try to inject script based on browser capabilities
+        if (browser.scripting?.executeScript) {
+          // Manifest V3 API (Chrome, Edge)
+          browser.scripting.executeScript({
+            target: { tabId: tabs[0].id },
+            func: injectNotification
+          }).catch(() => {
+            // Fallback if script injection fails
+            alert('Please open DevTools (F12) and look for the "RootCause" tab.');
+          });
+        } else if (browser.tabs?.executeScript) {
+          // Manifest V2 API (Firefox, older browsers)
+          browser.tabs.executeScript(tabs[0].id, {
+            code: `(${injectNotification.toString()})()`
+          }, () => {
+            if (browser.runtime.lastError) {
+              alert('Please open DevTools (F12) and look for the "RootCause" tab.');
+            }
+          });
+        } else {
+          // No scripting API available
+          alert('Please open DevTools (F12) and look for the "RootCause" tab.');
         }
-      }).catch(() => {
-        // Fallback if script injection fails
-        alert('Please open Chrome DevTools (F12 or Cmd+Option+I) and look for the "Performance Detective" tab.');
-      });
-    }
-  });
+      }
+    });
+  } else {
+    // No tabs API available
+    alert('Please open DevTools (F12) and look for the "RootCause" tab.');
+  }
   
   // Close the popup
+  window.close();
   window.close();
 });

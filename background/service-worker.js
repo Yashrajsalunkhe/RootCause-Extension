@@ -1,6 +1,40 @@
 // Background Service Worker - Handles performance analysis
+// Cross-browser compatibility for Chrome, Firefox, Edge, and Safari
 // Note: Chrome extension service workers don't fully support ES6 modules
 // So we inline the core modules here
+
+// ============= BROWSER COMPATIBILITY =============
+// Polyfill for cross-browser API compatibility
+const browser = (() => {
+  if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id) {
+    return chrome;
+  }
+  if (typeof browser !== 'undefined') {
+    return browser;
+  }
+  // Fallback for Safari or other browsers
+  return window.browser || window.chrome || {};
+})();
+
+// Handle both Manifest V2 and V3
+const isManifestV3 = !!(browser.runtime && browser.runtime.getManifest && 
+  browser.runtime.getManifest().manifest_version === 3);
+
+// Storage API compatibility
+const storage = browser.storage || {
+  local: {
+    get: () => Promise.resolve({}),
+    set: () => Promise.resolve(),
+    remove: () => Promise.resolve()
+  }
+};
+
+// Tabs API compatibility  
+const tabs = browser.tabs || {
+  query: () => Promise.resolve([]),
+  sendMessage: () => Promise.resolve(),
+  executeScript: () => Promise.resolve()
+};
 
 // ============= CORE MODULES INLINED =============
 

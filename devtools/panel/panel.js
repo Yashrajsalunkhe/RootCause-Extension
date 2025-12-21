@@ -1,4 +1,18 @@
 // Panel JavaScript - Main Controller
+// Cross-browser compatibility for Chrome, Firefox, Edge, and Safari
+
+// Browser compatibility layer
+const browser = (() => {
+  if (typeof chrome !== 'undefined' && chrome.runtime) {
+    return chrome;
+  }
+  if (typeof browser !== 'undefined') {
+    return browser;
+  }
+  // Fallback
+  return window.browser || window.chrome || {};
+})();
+
 class PerformanceDetective {
   constructor() {
     this.analyzeBtn = document.getElementById('analyze-btn');
@@ -26,9 +40,14 @@ class PerformanceDetective {
     this.showLoading();
     
     try {
-      const tabId = chrome.devtools.inspectedWindow.tabId;
+      // Cross-browser tab ID detection
+      const tabId = browser.devtools?.inspectedWindow?.tabId;
       
-      const response = await chrome.runtime.sendMessage({
+      if (!tabId) {
+        throw new Error('Unable to access inspected window');
+      }
+      
+      const response = await browser.runtime.sendMessage({
         action: 'analyzePerformance',
         tabId: tabId
       });
@@ -57,11 +76,16 @@ class PerformanceDetective {
     this.results.classList.remove('hidden');
     this.analyzeBtn.disabled = false;
     
-    // Update page info
-    chrome.devtools.inspectedWindow.eval('window.location.href', (url) => {
-      this.pageUrl.textContent = url;
+    // Update page info with cross-browser support
+    if (browser.devtools?.inspectedWindow?.eval) {
+      browser.devtools.inspectedWindow.eval('window.location.href', (url) => {
+        this.pageUrl.textContent = url;
+        this.pageTitle.textContent = 'Page Analysis';
+      });
+    } else {
       this.pageTitle.textContent = 'Page Analysis';
-    });
+      this.pageUrl.textContent = 'Current Page';
+    }
     
     // Update metrics
     if (data.rawData && data.rawData.timing && data.rawData.timing.navigation) {
