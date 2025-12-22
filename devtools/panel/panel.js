@@ -53,7 +53,7 @@ class PerformanceDetective {
       });
       
       if (response.success) {
-        this.displayResults(response.data);
+        this.displayResults(response);
       } else {
         this.showError(response.error);
       }
