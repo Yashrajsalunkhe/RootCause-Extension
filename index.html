@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RootCause is a Chrome DevTools extension that explains why your website is slow in plain English and gives actionable, prioritized fixes.">
+  <meta name="keywords" content="chrome extension, devtools, web performance, root cause analysis, lighthouse alternative">
+  <meta name="author" content="Yashraj">
+  <title>RootCause | Explain why your website is slow</title>
+  <link rel="icon" type="image/png" href="icons/analytics.png">
+  <link rel="stylesheet" href="landing.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="#top" aria-label="RootCause home">
+        <img src="icons/analytics.png" alt="RootCause logo">
+        <span>RootCause</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#workflow">Workflow</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#installation">Install</a>
+        <a class="btn btn-ghost" href="https://github.com/Yashrajsalunkhe/RootCause-Extension" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Chrome DevTools extension</p>
+          <h1>Stop guessing performance issues. Understand the <span>root cause</span>.</h1>
+          <p class="lead">
+            RootCause explains <strong>why</strong> pages are slow in plain English, traces issue dependencies, and ranks fixes by impact so teams ship improvements faster.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#installation">Get started</a>
+            <a class="btn btn-secondary" href="#screenshots">See screenshots</a>
+          </div>
+          <ul class="hero-points">
+            <li>Actionable narratives, not raw metrics only</li>
+            <li>Critical vs optimization vs micro-win prioritization</li>
+            <li>Real-time analysis inside DevTools</li>
+          </ul>
+        </div>
+        <aside class="hero-panel" aria-label="RootCause summary">
+          <h2>Why teams use RootCause</h2>
+          <div class="panel-stat">
+            <span class="value">Plain English</span>
+            <span class="label">for developers and stakeholders</span>
+          </div>
+          <div class="panel-stat">
+            <span class="value">Dependency tracing</span>
+            <span class="label">see cascading performance impact</span>
+          </div>
+          <div class="panel-stat">
+            <span class="value">Cross-browser builds</span>
+            <span class="label">Chrome, Firefox, Edge, Safari</span>
+          </div>
+          <a href="#workflow" class="panel-link">View workflow details →</a>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">What you get</p>
+          <h2>Built for practical performance debugging</h2>
+          <p>Everything needed to go from slow page to prioritized fixes without switching tools.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="card">
+            <h3>Root-cause narratives</h3>
+            <p>Explains the reason behind performance symptoms, not just “what failed.”</p>
+          </article>
+          <article class="card">
+            <h3>Priority engine</h3>
+            <p>Sorts findings into Critical, Optimization, and Micro-Win so work is focused.</p>
+          </article>
+          <article class="card">
+            <h3>Dependency tracing</h3>
+            <p>Maps issue chains so you can fix upstream causes and unlock multiple gains.</p>
+          </article>
+          <article class="card">
+            <h3>Readable recommendations</h3>
+            <p>Specific and implementable fix guidance for each detected issue.</p>
+          </article>
+          <article class="card">
+            <h3>DevTools-native experience</h3>
+            <p>Runs directly in the RootCause tab next to standard browser debugging tools.</p>
+          </article>
+          <article class="card">
+            <h3>Modern extension architecture</h3>
+            <p>Manifest V3 setup with a clean project structure for maintainability.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="workflow">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Workflow</p>
+          <h2>From inspection to action in four steps</h2>
+        </div>
+        <ol class="timeline">
+          <li>
+            <span class="step">1</span>
+            <div>
+              <h3>Open DevTools</h3>
+              <p>Use <code>F12</code> or right-click → Inspect on the page you want to optimize.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step">2</span>
+            <div>
+              <h3>Open the RootCause tab</h3>
+              <p>Switch to the custom panel integrated into your DevTools workspace.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step">3</span>
+            <div>
+              <h3>Run analysis</h3>
+              <p>Click <strong>Analyze Page</strong> to capture metrics, dependencies, and bottlenecks.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step">4</span>
+            <div>
+              <h3>Ship prioritized fixes</h3>
+              <p>Work top-down by impact and validate improvements on the next run.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="screenshots">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Product view</p>
+          <h2>Inside the RootCause panel</h2>
+          <p>Real screenshot from the extension UI.</p>
+        </div>
+        <figure class="shot">
+          <img src="screenshots/analysis-panel.png" alt="RootCause analysis panel with metrics and prioritized insights">
+          <figcaption>Analysis panel showing metrics summary, categorized issues, and actionable recommendations.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="installation">
+      <div class="container install-grid">
+        <div>
+          <div class="section-head left">
+            <p class="eyebrow">Installation</p>
+            <h2>Get running in minutes</h2>
+          </div>
+          <ol class="install-steps">
+            <li>
+              <h3>Clone repository</h3>
+              <pre><code>git clone https://github.com/Yashrajsalunkhe/RootCause-Extension.git
+cd Extenction</code></pre>
+            </li>
+            <li>
+              <h3>Load unpacked extension</h3>
+              <p>Open <code>chrome://extensions/</code>, enable Developer mode, then click <strong>Load unpacked</strong>.</p>
+            </li>
+            <li>
+              <h3>Analyze any page</h3>
+              <p>Open DevTools and run analysis from the <strong>RootCause</strong> tab.</p>
+            </li>
+          </ol>
+        </div>
+        <aside class="support-card">
+          <h3>Project highlights</h3>
+          <ul>
+            <li>Free and open source (MIT)</li>
+            <li>Cross-browser manifests included</li>
+            <li>Built with vanilla JavaScript and modern CSS</li>
+            <li>Documentation for architecture, testing, and development</li>
+          </ul>
+          <div class="support-links">
+            <a href="https://github.com/Yashrajsalunkhe/RootCause-Extension/blob/main/QUICKSTART.md" target="_blank" rel="noopener noreferrer">Quick start</a>
+            <a href="https://github.com/Yashrajsalunkhe/RootCause-Extension/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noopener noreferrer">Architecture</a>
+            <a href="https://github.com/Yashrajsalunkhe/RootCause-Extension/blob/main/docs/DEVELOPMENT.md" target="_blank" rel="noopener noreferrer">Development</a>
+            <a href="https://github.com/Yashrajsalunkhe/RootCause-Extension/blob/main/docs/TESTING.md" target="_blank" rel="noopener noreferrer">Testing</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer">
+      <div>
+        <a class="brand footer-brand" href="#top">
+          <img src="icons/analytics.png" alt="RootCause logo">
+          <span>RootCause</span>
+        </a>
+        <p>A DevTools extension that explains why your website is slow in plain English.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Project</h4>
+        <a href="#features">Features</a>
+        <a href="#workflow">Workflow</a>
+        <a href="#screenshots">Screenshots</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="CONTRIBUTING.md">Contributing</a>
+        <a href="CHANGELOG.md">Changelog</a>
+        <a href="LICENSE">License</a>
+      </div>
+      <div class="footer-col">
+        <h4>Repository</h4>
+        <a href="https://github.com/Yashrajsalunkhe/RootCause-Extension" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/Yashrajsalunkhe/RootCause-Extension/issues" target="_blank" rel="noopener noreferrer">Issues</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
